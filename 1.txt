@@ -1,0 +1,63 @@
+import turtle
+import random
+
+window = turtle.Screen()
+window.bgcolor("#1a1a2e")
+window.setup(width=800, height=600)
+
+t = turtle.Turtle()
+t.speed(0)
+t.penup()
+t.goto(0, -250)
+t.setheading(90)
+t.pendown()
+
+COLORS = {
+    "trunk": "#5D4037",
+    "branch": "#795548",
+    "leaves": ["#FF6B35", "#FF8C42", "#F9A03F", "#FFB347"]
+}
+
+def draw_fractal_tree(length, level):
+    if level == 0:
+        t.color(random.choice(COLORS["leaves"]))
+        t.begin_fill()
+        t.circle(5)
+        t.end_fill()
+        return
+    
+    t.width(max(1, level * 2))
+    
+    t.forward(length)
+    
+    current_pos = t.pos()
+    current_angle = t.heading()
+    
+    left_angle = random.uniform(25, 45)
+    t.left(left_angle)
+    draw_fractal_tree(length * random.uniform(0.65, 0.75), level - 1)
+    
+    t.penup()
+    t.goto(current_pos)
+    t.setheading(current_angle)
+    t.pendown()
+    
+    right_angle = random.uniform(25, 45)
+    t.right(right_angle)
+    draw_fractal_tree(length * random.uniform(0.65, 0.75), level - 1)
+    
+    t.penup()
+    t.goto(current_pos)
+    t.setheading(current_angle)
+    t.pendown()
+    
+    t.backward(length)
+
+def main():
+    t.color(COLORS["trunk"])
+    draw_fractal_tree(120, 6)
+    t.hideturtle()
+    window.exitonclick()
+
+if __name__ == "__main__":
+    main()
